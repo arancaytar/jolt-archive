@@ -29,7 +29,7 @@ div.date {
     padding-bottom:5px;
 }
 
-div.pagenumbers {
+div#pagenumbers {
     text-align:center;
     margin-bottom:5px;
 }
