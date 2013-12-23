@@ -47,7 +47,7 @@ define('FOOTER', '<p>
     These are the archives of the Jolt Nationstates Forum, saved on Sunday, the seventh of February, 2010.
     </p>
     <p>
-      They are hosted here by <a href="mailto:arancaytar@ermarian.net">Arancaytar</a> of the <a href="http://ermarian.net/">Ermarian Network</a>, of the <a href="http://www.nationstates.net/ermarian">Endless Empire of Ermarian</a>.
+      They are hosted here by <a href="mailto:arancaytar@ermarian.net">Arancaytar</a> of the <a href="http://ermarian.net/">Ermarian Network</a>, of the <a href="http://www.nationstates.net/ermarian">Endless Empire of Ermarian</a>. All content is copyright 2002-2010 of the original authors; refer to the <a href="/disclaimer.html">copyright disclaimer</a>.
 </p>');
 
 if (file_exists($file)) {
