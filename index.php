@@ -65,7 +65,7 @@ if (file_exists($file)) {
     #        );
     #    }
     #}
-    $title = preg_match('%<title> (.*) [Archive]  - Jolt Forums</title>%', $data, $match) ? $match[1] : NULL;
+    $title = preg_match('%<title> (.*) \[Archive\]  - Jolt Forums</title>%', $data, $match) ? $match[1] : NULL;
     $data = str_replace('<hr />', '', $data);
     $data = preg_replace('%<div id="navbar">.*?</p>%s', HEADER . NAVBAR . "<h2>$title</h2>", $data);
     $data = preg_replace('/href="f-([0-9]+)(-p-([0-9]+))\.html"/', 'href="/jolt/$1&amp;page=$3"', $data);
