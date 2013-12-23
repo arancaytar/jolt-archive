@@ -28,3 +28,8 @@ div.date {
     font-style:italic;
     padding-bottom:5px;
 }
+
+div.pagenumbers {
+    text-align:center;
+    margin-bottom:5px;
+}
