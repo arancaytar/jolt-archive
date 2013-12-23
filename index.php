@@ -1,4 +1,6 @@
 <?php
+
+define('POST_PATTERN', '%<div class="posttop"><div class="username">(?<user>.*?)</div><div class="date">(?<date>.*?)</div></div><div class="posttext">(?<post>.*)</div></div><hr />%s');
 $args = explode('/', @$_SERVER['REQUEST_URI']);
 array_shift($args);
 array_shift($args);
@@ -41,7 +43,7 @@ foreach ($fora as $fid => $name) {
   $nav_links[] = $fid == $forum ? "<strong>$name</strong>" : '<a href="/jolt/'.$fid.'">'.$name.'</a>';
 }
 
-define('NAVBAR', '<div id="navbar">'.implode(' | ', $nav_links).'</div>');
+define('NAVBAR', '<div id="navbar">'.implode(' | ', $nav_links).'</div><hr />');
 define('HEADER', '<h1><a href="/jolt">Jolt NS Archives</a></h1>');
 define('FOOTER', '<p>
     These are the archives of the Jolt Nationstates Forum, saved on Sunday, the seventh of February, 2010.
@@ -52,12 +54,25 @@ define('FOOTER', '<p>
 
 if (file_exists($file)) {
     $data = file_get_contents($file);
+
+    #$data = explode('<div class="post">', $data)
+    #foreach ($data as $i => $post) {
+    #    if (preg_match(POST_PATTERN, $post, $match)) {
+    #        $posts[$i] = array(
+    #            'user' => $match['user'],
+    #            'date' => $match['date'],
+    #            'post' => $match['post'],
+    #        );
+    #    }
+    #}
+
+    $data = str_replace('<hr />', '', $data);
     $data = preg_replace('%<div id="navbar">.*?</p>%s', HEADER . NAVBAR, $data);
     $data = preg_replace('/href="f-([0-9]+)(-p-([0-9]+))\.html"/', 'href="/jolt/$1&amp;page=$3"', $data);
     $data = preg_replace('/href="f-([0-9]+)\.html"/', 'href="/jolt/$1"', $data);
     $data = preg_replace('/href="t-([0-9]+)(-p-([0-9]+))\.html"/', 'href="/jolt/'.$forum.'/$1&amp;page=$3"', $data);
     $data = preg_replace('/href="t-([0-9]+)\.html"/', 'href="/jolt/'.$forum.'/$1"', $data);
-    $data = str_replace('<div id="copyright">vBulletin&reg; v3.8.3, Copyright &copy;2000-2010, Jelsoft Enterprises Ltd.</div>', '<small><em>'.FOOTER.'</em></small>', $data);
+    $data = str_replace('<div id="copyright">vBulletin&reg; v3.8.3, Copyright &copy;2000-2010, Jelsoft Enterprises Ltd.</div>', '<hr /><small><em>'.FOOTER.'</em></small>', $data);
     $data = str_replace('<link rel="stylesheet" type="text/css" href="http://forums.joltonline.com/archive/archive.css" />', '<link rel="stylesheet" type="text/css" href="/jolt/style.css" />', $data);
 }
 else {
@@ -73,7 +88,6 @@ else {
   <body>
     <h1>Jolt NS Archives</h1>
     $NAVBAR
-    <hr />
     $FOOTER
   </body>
 </html>
