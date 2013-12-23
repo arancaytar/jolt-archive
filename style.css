@@ -20,3 +20,9 @@ div.post:nth-child(even) {
 div.post:nth-child(odd) {
     background : #aaa;
 }
+div.username {
+    font-weight:bold;
+}
+div.date {
+    font-style:italic;
+}
