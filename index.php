@@ -40,7 +40,8 @@ $fora = array(
 );
 
 foreach ($fora as $fid => $name) {
-  $nav_links[] = $fid == $forum ? "<strong>$name</strong>" : '<a href="/jolt/'.$fid.'">'.$name.'</a>';
+  $forum_link = $fid != $forum || $topic ? '<a href="/jolt/'.$fid.'">'.$name.'</a>' : $name;  
+  $nav_links[] = $fid == $forum ? "<strong>$forum_link</strong>" : $forum_link;
 }
 
 define('NAVBAR', '<div id="navbar">'.implode(' | ', $nav_links).'</div><hr />');
