@@ -22,6 +22,7 @@ div.post:nth-child(odd) {
 }
 div.username {
     font-weight:bold;
+    font-size:150%;
 }
 div.date {
     font-style:italic;
