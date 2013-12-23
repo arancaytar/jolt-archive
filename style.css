@@ -25,4 +25,5 @@ div.username {
 }
 div.date {
     font-style:italic;
+    padding-bottom:5px;
 }
