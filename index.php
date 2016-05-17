@@ -44,14 +44,24 @@ foreach ($fora as $fid => $name) {
   $nav_links[] = $fid == $forum ? "<strong><em>$forum_link</em></strong>" : $forum_link;
 }
 
+const HEAD = <<<DOC
+<!DOCTYPE html>
+<html>
+<head>
+DOC;
 define('NAVBAR', '<div id="navbar">'.implode(' | ', $nav_links).'</div><hr />');
 define('HEADER', '<h1><a href="/jolt">Jolt NS Archives</a></h1>');
-define('FOOTER', '<p>
-    These are the archives of the Jolt Nationstates Forum, saved on Sunday, the seventh of February, 2010.
-    </p>
-    <p>
-      They are hosted here by <a href="mailto:arancaytar@ermarian.net">Arancaytar</a> of the <a href="http://ermarian.net/">Ermarian Network</a>, of the <a href="http://www.nationstates.net/ermarian">Endless Empire of Ermarian</a>. All content is copyright 2002-2010 of the original authors; refer to the <a href="/jolt/disclaimer.html">copyright disclaimer</a>.
-</p>');
+const FOOTER = <<<DOC
+<footer>
+  <p>These are the archives of the Jolt Nationstates Forum, saved on Sunday, the seventh of February, 2010.</p>
+  <p>They are hosted here by <a href="mailto:arancaytar@ermarian.net">Arancaytar</a> of the
+    <a href="https://ermarian.net/">Ermarian Network</a>, of the
+    <a href="https://www.nationstates.net/ermarian">Endless Empire of Ermarian</a>.
+    All content is copyright 2002-2010 of the original authors; refer to the
+    <a href="/jolt/disclaimer.html">copyright disclaimer</a>.
+  </p>
+</footer>
+DOC;
 
 if (file_exists($file)) {
     $data = file_get_contents($file);
@@ -67,13 +77,15 @@ if (file_exists($file)) {
     #    }
     #}
     $title = preg_match('%<title> (.*) \[Archive\] (( - Page [0-9]+)?) - Jolt Forums</title>%', $data, $match) ? $match[1] . $match[2] : NULL;
+    $data = preg_replace('/<!.*?<head>/s', HEAD, $data);
     $data = str_replace('<hr />', '', $data);
+    $data = preg_replace('/<meta.*?charset=.*? \/>/', '', $data);
     $data = preg_replace('%<div id="navbar">.*?</p>%s', HEADER . NAVBAR . "<h2>$title</h2>", $data);
     $data = preg_replace('/href="f-([0-9]+)(-p-([0-9]+))\.html"/', 'href="/jolt/$1&amp;page=$3"', $data);
     $data = preg_replace('/href="f-([0-9]+)\.html"/', 'href="/jolt/$1"', $data);
     $data = preg_replace('/href="t-([0-9]+)(-p-([0-9]+))\.html"/', 'href="/jolt/'.$forum.'/$1&amp;page=$3"', $data);
     $data = preg_replace('/href="t-([0-9]+)\.html"/', 'href="/jolt/'.$forum.'/$1"', $data);
-    $data = str_replace('<div id="copyright">vBulletin&reg; v3.8.3, Copyright &copy;2000-2010, Jelsoft Enterprises Ltd.</div>', '<hr /><small><em>'.FOOTER.'</em></small>', $data);
+    $data = str_replace('<div id="copyright">vBulletin&reg; v3.8.3, Copyright &copy;2000-2010, Jelsoft Enterprises Ltd.</div>', '<hr />'.FOOTER, $data);
     $data = str_replace('<link rel="stylesheet" type="text/css" href="http://forums.joltonline.com/archive/archive.css" />', '<link rel="stylesheet" type="text/css" href="/jolt/style.css" />', $data);
 }
 else {
@@ -86,7 +98,7 @@ else {
     <title>Jolt NS Archives</title>
     <link rel="stylesheet" type="text/css" href="/jolt/style.css" />
   </head>
-  <body>
+  <body class="mainpage">
     <h1>Jolt NS Archives</h1>
     $NAVBAR
     $FOOTER
