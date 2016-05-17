@@ -1,6 +1,6 @@
 <?php
 
-define('POST_PATTERN', '%<div class="posttop"><div class="username">(?<user>.*?)</div><div class="date">(?<date>.*?)</div></div><div class="posttext">(?<post>.*)</div></div><hr />%s');
+const POST_PATTERN = '%<div class="posttop"><div class="username">(?<user>.*?)</div><div class="date">(?<date>.*?)</div></div><div class="posttext">(?<post>.*)</div></div><hr />%s'
 $args = explode('/', @$_SERVER['REQUEST_URI']);
 array_shift($args);
 array_shift($args);
@@ -26,7 +26,7 @@ if (count($args) > 0) {
         $file = "files/$forum/f-$forum$page.html";
     }
 }
-$fora = array(
+$fora = [
     1223 => 'NationStates',
     1224 => 'Technical',
     1225 => 'World Assembly',
@@ -37,10 +37,10 @@ $fora = array(
     1232 => 'Got Issues?',
     1233 => 'Archive',
     1234 => 'Gameplay',
-);
+];
 
 foreach ($fora as $fid => $name) {
-  $forum_link = $fid != $forum || $topic ? '<a href="/jolt/'.$fid.'">'.$name.'</a>' : $name;  
+  $forum_link = $fid != $forum || $topic ? '<a href="/jolt/'.$fid.'">'.$name.'</a>' : $name;
   $nav_links[] = $fid == $forum ? "<strong><em>$forum_link</em></strong>" : $forum_link;
 }
 
@@ -49,8 +49,8 @@ const HEAD = <<<DOC
 <html>
 <head>
 DOC;
-define('NAVBAR', '<div id="navbar">'.implode(' | ', $nav_links).'</div><hr />');
-define('HEADER', '<h1><a href="/jolt">Jolt NS Archives</a></h1>');
+define('NAVBAR', '<div id="navbar">' . implode(' | ', $nav_links) . '</div><hr />');
+const HEADER = '<h1><a href="/jolt">Jolt NS Archives</a></h1>';
 const FOOTER = <<<DOC
 <footer>
   <p>These are the archives of the Jolt Nationstates Forum, saved on Sunday, the seventh of February, 2010.</p>
@@ -66,16 +66,6 @@ DOC;
 if (file_exists($file)) {
     $data = file_get_contents($file);
 
-    #$data = explode('<div class="post">', $data)
-    #foreach ($data as $i => $post) {
-    #    if (preg_match(POST_PATTERN, $post, $match)) {
-    #        $posts[$i] = array(
-    #            'user' => $match['user'],
-    #            'date' => $match['date'],
-    #            'post' => $match['post'],
-    #        );
-    #    }
-    #}
     $title = preg_match('%<title> (.*) \[Archive\] (( - Page [0-9]+)?) - Jolt Forums</title>%', $data, $match) ? $match[1] . $match[2] : NULL;
     $data = preg_replace('/<!.*?<head>/s', HEAD, $data);
     $data = str_replace('<hr />', '', $data);
