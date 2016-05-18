@@ -1,6 +1,6 @@
 <?php
 
-const POST_PATTERN = '%<div class="posttop"><div class="username">(?<user>.*?)</div><div class="date">(?<date>.*?)</div></div><div class="posttext">(?<post>.*)</div></div><hr />%s'
+const POST_PATTERN = '%<div class="posttop"><div class="username">(?<user>.*?)</div><div class="date">(?<date>.*?)</div></div><div class="posttext">(?<post>.*)</div></div><hr />%s';
 $args = explode('/', @$_SERVER['REQUEST_URI']);
 array_shift($args);
 array_shift($args);
