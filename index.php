@@ -1,8 +1,8 @@
 <?php
 
 const POST_PATTERN = '%<div class="posttop"><div class="username">(?<user>.*?)</div><div class="date">(?<date>.*?)</div></div><div class="posttext">(?<post>.*)</div></div><hr />%s';
-$args = explode('/', @$_SERVER['REQUEST_URI']);
-array_shift($args);
+$request = trim(@$_SERVER['REQUEST_URI'], '/');
+$args = explode('/', $request);
 array_shift($args);
 $page = NULL;
 if (preg_match('/page=([0-9]+)/', $_SERVER['REQUEST_URI'], $match)) {
@@ -25,7 +25,7 @@ if (count($args) > 0) {
     else {
         $file = "files/$forum/f-$forum$page.html";
     }
-}
+} else $file = '';
 $fora = [
     1223 => 'NationStates',
     1224 => 'Technical',
@@ -78,6 +78,27 @@ if (file_exists($file)) {
     $data = preg_replace('/href="t-([0-9]+)\.html"/', 'href="/jolt/'.$forum.'/$1"', $data);
     $data = str_replace('<div id="copyright">vBulletin&reg; v3.8.3, Copyright &copy;2000-2010, Jelsoft Enterprises Ltd.</div>', '<hr />'.FOOTER, $data);
     $data = str_replace('<link rel="stylesheet" type="text/css" href="http://forums.joltonline.com/archive/archive.css" />', '<link rel="stylesheet" type="text/css" href="/jolt/style.css" />', $data);
+}
+elseif ($file) {
+    header('HTTP/1.1 404 Not Found');
+    $NAVBAR = NAVBAR;
+    $FOOTER = FOOTER;
+    $data = <<<DOC
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Jolt NS Archives</title>
+    <link rel="stylesheet" type="text/css" href="/jolt/style.css" />
+  </head>
+  <body>
+    <h1>Jolt NS Archives</h1>
+    $NAVBAR
+    <h2>404</h2>
+    <p>The requested page <em>$request</em> does not exist.</p>
+    $FOOTER
+  </body>
+</html>
+DOC;
 }
 else {
     $NAVBAR = NAVBAR;
