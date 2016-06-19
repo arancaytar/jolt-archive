@@ -65,6 +65,7 @@ DOC;
 
 if (file_exists($file)) {
     $data = file_get_contents($file);
+    $data = iconv('windows-1252', 'utf-8', $data);
 
     $title = preg_match('%<title> (.*) \[Archive\] (( - Page [0-9]+)?) - Jolt Forums</title>%', $data, $match) ? $match[1] . $match[2] : NULL;
     $data = preg_replace('/<!.*?<head>/s', HEAD, $data);
