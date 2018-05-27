@@ -2,11 +2,12 @@
 
 const POST_PATTERN = '%<div class="posttop"><div class="username">(?<user>.*?)</div><div class="date">(?<date>.*?)</div></div><div class="posttext">(?<post>.*)</div></div><hr />%s';
 $request = trim(@$_SERVER['REQUEST_URI'], '/');
-$args = explode('/', $request);
+$args = explode('/', str_replace(['&', '?'], '/', $request));
 array_shift($args);
 $page = NULL;
-if (preg_match('/page=([0-9]+)/', $_SERVER['REQUEST_URI'], $match)) {
+if (preg_match('/page=([0-9]+)/', end($args), $match)) {
   $page = $match[1];
+  array_pop($args);
 }
 $forum = $topic = NULL;
 
@@ -17,9 +18,9 @@ else {
     $page = '';
 }
 if (count($args) > 0) {
-    $forum = ($args[0])*1;
+    $forum = (int) $args[0];
     if (count($args) > 1) {
-        $topic = ($args[1])*1;
+        $topic = (int) $args[1];
         $file = "files/$forum/t-$topic$page.html";
     }
     else {
@@ -72,9 +73,9 @@ if (file_exists($file)) {
     $data = str_replace('<hr />', '', $data);
     $data = preg_replace('/<meta.*?charset=.*? \/>/', '', $data);
     $data = preg_replace('%<div id="navbar">.*?</p>%s', HEADER . NAVBAR . "<h2>$title</h2>", $data);
-    $data = preg_replace('/href="f-([0-9]+)(-p-([0-9]+))\.html"/', 'href="/jolt/$1&amp;page=$3"', $data);
+    $data = preg_replace('/href="f-([0-9]+)(-p-([0-9]+))\.html"/', 'href="/jolt/$1/page=$3"', $data);
     $data = preg_replace('/href="f-([0-9]+)\.html"/', 'href="/jolt/$1"', $data);
-    $data = preg_replace('/href="t-([0-9]+)(-p-([0-9]+))\.html"/', 'href="/jolt/'.$forum.'/$1&amp;page=$3"', $data);
+    $data = preg_replace('/href="t-([0-9]+)(-p-([0-9]+))\.html"/', 'href="/jolt/'.$forum.'/$1/page=$3"', $data);
     $data = preg_replace('/href="t-([0-9]+)\.html"/', 'href="/jolt/'.$forum.'/$1"', $data);
     $data = str_replace('<div id="copyright">vBulletin&reg; v3.8.3, Copyright &copy;2000-2010, Jelsoft Enterprises Ltd.</div>', '<hr />'.FOOTER, $data);
     $data = str_replace('<link rel="stylesheet" type="text/css" href="http://forums.joltonline.com/archive/archive.css" />', '<link rel="stylesheet" type="text/css" href="/jolt/style.css" />', $data);
