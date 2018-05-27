@@ -1,5 +1,11 @@
 <?php
 
+require_once 'vendor/autoload.php';
+
+use Symfony\Component\Yaml\Yaml;
+
+$config = Yaml::parse(file_get_contents('config.yml'));
+
 const POST_PATTERN = '%<div class="posttop"><div class="username">(?<user>.*?)</div><div class="date">(?<date>.*?)</div></div><div class="posttext">(?<post>.*)</div></div><hr />%s';
 $request = trim(@$_SERVER['REQUEST_URI'], '/');
 $args = explode('/', str_replace(['&', '?'], '/', $request));
@@ -79,6 +85,18 @@ if (file_exists($file)) {
     $data = preg_replace('/href="t-([0-9]+)\.html"/', 'href="/jolt/'.$forum.'/$1"', $data);
     $data = str_replace('<div id="copyright">vBulletin&reg; v3.8.3, Copyright &copy;2000-2010, Jelsoft Enterprises Ltd.</div>', '<hr />'.FOOTER, $data);
     $data = str_replace('<link rel="stylesheet" type="text/css" href="http://forums.joltonline.com/archive/archive.css" />', '<link rel="stylesheet" type="text/css" href="/jolt/style.css" />', $data);
+    $data = str_replace('</body>', <<<DOC
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={$config['gtag']}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', {$config['gtag']});
+</script>
+DOC
+, $data);
 }
 elseif ($file) {
     header('HTTP/1.1 404 Not Found');
@@ -115,6 +133,16 @@ else {
     <h1>Jolt NS Archives</h1>
     $NAVBAR
     $FOOTER
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={$config['gtag']}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', {$config['gtag']});
+</script>
   </body>
 </html>
 DOC;
