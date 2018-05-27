@@ -57,15 +57,13 @@ const HEAD = <<<DOC
 <head>
 DOC;
 define('NAVBAR', '<div id="navbar">' . implode(' | ', $nav_links) . '</div><hr />');
-const HEADER = '<h1><a href="/jolt">Jolt NS Archives</a></h1>';
+const HEADER = '<h1><a href="/jolt">NationStates Jolt Archive</a></h1>';
 const FOOTER = <<<DOC
 <footer>
-  <p>These are the archives of the Jolt Nationstates Forum, saved on Sunday, the seventh of February, 2010.</p>
-  <p>They are hosted here by <a href="mailto:arancaytar@ermarian.net">Arancaytar</a> of the
-    <a href="https://ermarian.net/">Ermarian Network</a>, of the
-    <a href="https://www.nationstates.net/ermarian">Endless Empire of Ermarian</a>.
-    All content is copyright 2002-2010 of the original authors; refer to the
-    <a href="/jolt/disclaimer.html">copyright disclaimer</a>.
+  <p>
+    NationStates Jolt Forum archives (saved Sunday, 7 February 2010).
+    |
+    <a href="/jolt/data-info.html">Copyright and data protection statement.</a>
   </p>
 </footer>
 DOC;
